@@ -1,0 +1,15 @@
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\OpenWeatherMap.exe.config
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\OpenWeatherMap.exe
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\OpenWeatherMap.pdb
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\appCommon.dll
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\appData.dll
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\appSDK.dll
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\Newtonsoft.Json.dll
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\EntityFramework.dll
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\NSspi.dll
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\bin\Debug\Newtonsoft.Json.xml
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.csproj.CoreCompileInputs.cache
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.csproj.CopyComplete
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.exe
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.pdb
+C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.csprojAssemblyReference.cache
