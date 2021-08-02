@@ -12,4 +12,3 @@ C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.
 C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.csproj.CopyComplete
 C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.exe
 C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.pdb
-C:\Users\PC\source\repos\OpenWeatherMap\OpenWeatherMap\obj\Debug\OpenWeatherMap.csprojAssemblyReference.cache
