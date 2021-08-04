@@ -1,4 +1,5 @@
-﻿using Prysm.AppVision.SDK;
+﻿using Prysm.AppVision.Data;
+using Prysm.AppVision.SDK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,13 +13,21 @@ namespace OpenWeatherMap
 {
     class DriverMinimal
     {
-        private static bool isClosed = false;
-        private static Timer timer;
-        private static AppServerForDriver appServerForDriver;
+        private bool _isClosed = false;
+        private Timer _timer;
+        private AppServerForDriver _appServerForDriver;
+        private OpenWeatherService _openWeatherService;
+        String _nameVille = "Rabat";
+        VariableRow _variableRow;
+
+        public DriverMinimal()
+        {
+            _appServerForDriver = new AppServerForDriver();
+            _openWeatherService = new OpenWeatherService();
+        }
 
         public async Task ConnectToTheServer()
         {
-            appServerForDriver = new AppServerForDriver();
             var arguments = Environment.GetCommandLineArgs();
 
             //ProtocolName@Hostaname
@@ -28,44 +37,64 @@ namespace OpenWeatherMap
             var protocolName = arg[0];
             var hostname = arg.Length > 1 ? arg[1] : "";
 
-            appServerForDriver.Open(hostname);
-            appServerForDriver.Login(protocolName);
+            _appServerForDriver.Open(hostname);
+            _appServerForDriver.Login(protocolName);
 
-            var protocolVar = await appServerForDriver.VariableManager.GetVariablesByProtocol(appServerForDriver.CurrentProtocol.Name);
-            appServerForDriver.AddFilterNotifications("$V."+ protocolVar[0].Name+ ".Cmd.Ville");
+            _variableRow = (await _appServerForDriver.VariableManager.GetVariablesByProtocol(_appServerForDriver.CurrentProtocol.Name)).First();
+            _appServerForDriver.AddFilterNotifications("$V."+ _variableRow.Name+ ".Cmd.Ville");
 
-            appServerForDriver.ProtocolSynchronized();
-            appServerForDriver.StartNotifications(false);   
+            _appServerForDriver.ProtocolSynchronized();
+            _appServerForDriver.StartNotifications(false);   
 
-            appServerForDriver.ControllerManager.Closed += ControllerManager_closed;
-            appServerForDriver.VariableManager.StateChanged += VariableManager_StateChanged;
+            _appServerForDriver.ControllerManager.Closed += ControllerManager_closed;
+            _appServerForDriver.VariableManager.StateChanged += VariableManager_StateChanged;
 
-            Console.WriteLine("Is connected : " + appServerForDriver.IsConnected);
-            Console.WriteLine($"Current protocol : {appServerForDriver.CurrentProtocol.Name}");
+            _timer = new Timer(SyncWeather, null, 0, Timeout.Infinite);
 
-            while (!isClosed)
+            Console.WriteLine("Is connected : " + _appServerForDriver.IsConnected);
+            Console.WriteLine($"Current protocol : {_appServerForDriver.CurrentProtocol.Name}");
+
+            while (!_isClosed)
             {
                 Thread.Sleep(100);
             }
         }
 
-        private static void VariableManager_StateChanged(Prysm.AppVision.Data.VariableState obj)
+        private void VariableManager_StateChanged(Prysm.AppVision.Data.VariableState obj)
         {
             Console.WriteLine($"variable : {obj.Name} | state : {obj.Value}");
 
-            ArrayList arguments = new ArrayList();
-            arguments.Add(obj);
-            arguments.Add(appServerForDriver);
-
-            timer = new Timer(OpenWeatherService.XmlChange, arguments, 1000, Timeout.Infinite);        
+             _nameVille = (String) obj.Value;
+            SyncWeather(null);
 
         }
 
-        private static void ControllerManager_closed()
+        private void ControllerManager_closed()
         {
-            appServerForDriver.Close();
-            isClosed = true;
-        }  
+            _appServerForDriver.Close();
+            _isClosed = true;
+        }
+        
+        public async void SyncWeather(Object obj)
+        {
+            var current = await _openWeatherService.GetCurrentWeather(_nameVille);
+
+            if (current == null)
+            {
+                _appServerForDriver.AlarmManager.AddAlarm(50, "Ville Incorrect", "Ville incorrecte");
+                
+            }
+            else
+            {
+                _appServerForDriver.VariableManager.Set(_variableRow.Name+".State.Temperature", current.Temperature.Value);
+                _appServerForDriver.VariableManager.Set(_variableRow.Name+".State.Vitesse", current.Wind.Speed.Value);
+                _appServerForDriver.VariableManager.Set(_variableRow.Name+".State.Pression", current.Pressure.Value);
+                _appServerForDriver.VariableManager.Set(_variableRow.Name+".State.Humidite", current.Humidity.Value);
+                _appServerForDriver.VariableManager.Set(_variableRow.Name+".State.Date_Heure", current.Lastupdate.Value);
+            }
+            
+            _timer.Change(10000, Timeout.Infinite);
+        }
 
         
     }
